@@ -1,0 +1,7 @@
+{
+    "name": "Material",
+    "version": "0.0.0",
+    "private": true,
+    "main": "./Material.js"
+  }
+  

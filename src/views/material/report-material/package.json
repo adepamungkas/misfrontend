@@ -1,0 +1,7 @@
+{
+    "name": "ReportMaterial",
+    "version": "0.0.0",
+    "private": true,
+    "main": "./ReportMaterial.js"
+  }
+  
