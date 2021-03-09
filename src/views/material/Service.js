@@ -15,7 +15,7 @@ class Service {
     createMaterial = (payload) => {
         const url = `${CONST.BASE_URL}materials`;
         var bodyFormData = new FormData();
-        bodyFormData.append('Date', payload.Date);
+        bodyFormData.append('Date', moment(payload.Date).format());
         bodyFormData.append('Name', payload.Name);
         bodyFormData.append('IsBroken', payload.IsBroken);
         bodyFormData.append('Size', payload.Size);
@@ -24,8 +24,8 @@ class Service {
         bodyFormData.append('Description', payload.Description);
         bodyFormData.append('InputBy', payload.InputBy);
         bodyFormData.append('Trademark', payload.Trademark);
-       
-
+        bodyFormData.append('Vendor', payload.Vendor);
+console.log("",moment(payload.Date).format())
         return axios.post(url, bodyFormData, { headers: HEADERS })
             .then(data => {
 
@@ -38,7 +38,7 @@ class Service {
 
     editMaterial = (ID, payload) => {
         var bodyFormData = new FormData();
-        bodyFormData.append('Date', payload.Date);
+        bodyFormData.append('Date', moment(payload.Date).format());
         bodyFormData.append('Name', payload.Name);
         bodyFormData.append('IsBroken', payload.IsBroken);
         bodyFormData.append('Size', payload.Size);
@@ -47,6 +47,7 @@ class Service {
         bodyFormData.append('Description', payload.Description);
         bodyFormData.append('InputBy', payload.InputBy);
         bodyFormData.append('Trademark', payload.Trademark);
+        bodyFormData.append('Vendor', payload.Vendor);
        
         let url = `${CONST.BASE_URL}materials/${ID}`;
         return axios.put(url, bodyFormData, { headers: HEADERS })

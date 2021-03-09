@@ -314,7 +314,7 @@ class ReportMaterial extends Component {
                                                 id="text-input"
                                                 name="name"
                                                 value={this.state.name}
-                                                placeholder="Text"
+                                                placeholder="Name Material"
                                                 onChange={(event) => {
                                                     console.log(event.target.value)
                                                     this.setState({ name: event.target.value })
@@ -322,7 +322,7 @@ class ReportMaterial extends Component {
 
                                                 }
                                             />
-                                            <CFormText>Plaese type name material</CFormText>
+                                            {/* <CFormText>Plaese type name material</CFormText> */}
                                         </CCol>
                                     </CFormGroup>
                                     <CFormGroup row>
@@ -335,7 +335,7 @@ class ReportMaterial extends Component {
                                                     this.setState({ name: event.target.value })
                                                 }}
                                                 name="vendor" placeholder="Enter Vendor" autoComplete="email" />
-                                            <CFormText className="help-block">Please enter vendor name</CFormText>
+                                            {/* <CFormText className="help-block">Please enter vendor name</CFormText> */}
                                         </CCol>
                                     </CFormGroup>
 
@@ -346,7 +346,7 @@ class ReportMaterial extends Component {
                                                 <CCol xs="12" md="9">
 
                                                     <Select
-                                                        placeholder={'pilih unit'}
+                                                        placeholder={'select type'}
                                                         isClearable={true}
                                                         options={this.state.types}
                                                         value={this.state.type}
@@ -814,7 +814,7 @@ class ReportMaterial extends Component {
                     <CCol xs="12" lg="12">
                         <CCard>
                             <CCardHeader>
-                                Striped Table
+                               Table Material
                             </CCardHeader>
                             <CCardBody>
                                 <CDataTable

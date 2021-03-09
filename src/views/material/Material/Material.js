@@ -65,6 +65,16 @@ class Material extends Component {
         isBroken: false,
         trademark: "",
         date: new Date(),
+
+        colorToEdit: "",
+        descriptionToEdit: "",
+        vendorToEdit: "",
+        nameToEdit: "",
+        sizeToEdit: 0,
+        isBrokenToEdit: false,
+        trademarkToEdit: "",
+        dateToEdit: new Date(),
+
         isCreateLoading: false,
         success: false,
         danger: false,
@@ -122,8 +132,12 @@ class Material extends Component {
     showAddModal = (value) => {
 
         this.setState({ success: value });
+        this.resetCreateModal()
     }
 
+    resetCreateModal = () => {
+        this.setState({ validationCreateForm: {} })
+    }
     showEditModal = (value) => {
 
         this.setState({ warning: value });
@@ -145,7 +159,11 @@ class Material extends Component {
             errors.vendor = "vendor is Required"
         }
 
-        if (this.state.name == null || this.state.name ==="") {
+        if (this.state.color == null || this.state.color == "") {
+            errors.vendor = "vendor is Required"
+        }
+
+        if (this.state.name == null || this.state.name === "") {
             errors.name = "name is Required"
         }
 
@@ -182,7 +200,7 @@ class Material extends Component {
             Vendor: this.state.vendor,
             Color: this.state.color,
             Size: this.state.size,
-            Type: this.state.type,
+            Type: this.state.type.value,
             IsBroken: this.state.isBroken,
             validationCreateForm: {}
         }
@@ -227,14 +245,23 @@ class Material extends Component {
 
     handleEditClick = (item) => {
         console.log("item", item)
-        this.setState({ selectedMaterial: item }, () => {
+        this.setState({
+            selectedMaterial: item,
+            nameToEdit: item.Name,
+            descriptionToEdit:item.Description,
+            dateToEdit: item.Date,
+            colorToEdit: item.Color,
+            vendorToEdit: item.Vendor,
+            sizeToEdit: item.Size,
+            trademarkToEdit: item.Trademark,
+            isBrokenToEdit: item.IsBroken
+        }, () => {
             this.showEditModal(true);
         })
     }
 
     handleDelete = () => {
         // this.setState({ isDeleteOvertimeLoading: true })
-
 
         this.service.deleteMaterial(this.state.selectedMaterial?.ID)
             .then(() => {
@@ -254,18 +281,19 @@ class Material extends Component {
     }
 
     handleEdit = () => {
+
         const payload = {
             Name: this.state.name,
             InputBy: this.state.inputBy,
             IsBroken: false,
-            Date: this.state.date,
-            Description: this.state.description,
-            Trademark: this.state.trademark,
-            Vendor: this.state.vendor,
-            Color: this.state.color,
-            Size: this.state.size,
-            Type: this.state.type,
-            IsBroken: this.state.isBroken,
+            Date: this.state.dateToEdit,
+            Description: this.state.descriptionToEdit,
+            Trademark: this.state.trademarkToEdit,
+            Vendor: this.state.vendorToEdit,
+            Color: this.state.colorToEdit,
+            Size: this.state.sizeToEdit,
+            Type: this.state.type.value,
+            IsBroken: this.state.isBrokenToEdit,
         }
 
         // this.setState({ isDeleteOvertimeLoading: true })
@@ -314,7 +342,7 @@ class Material extends Component {
                                                 id="text-input"
                                                 name="name"
                                                 value={this.state.name}
-                                                placeholder="Text"
+                                                placeholder="Name Material"
                                                 onChange={(event) => {
                                                     console.log(event.target.value)
                                                     this.setState({ name: event.target.value })
@@ -322,7 +350,8 @@ class Material extends Component {
 
                                                 }
                                             />
-                                            <CFormText>Plaese type name material</CFormText>
+
+                                            {/* <CFormText>Plaese type name material</CFormText> */}
                                         </CCol>
                                     </CFormGroup>
                                     <CFormGroup row>
@@ -332,10 +361,10 @@ class Material extends Component {
                                         <CCol xs="12" md="9">
                                             <CInput type="text" value={this.state.vendor} id="vendor-input"
                                                 onChange={(event) => {
-                                                    this.setState({ name: event.target.value })
+                                                    this.setState({ vendor: event.target.value })
                                                 }}
-                                                name="vendor" placeholder="Enter Vendor" autoComplete="email" />
-                                            <CFormText className="help-block">Please enter vendor name</CFormText>
+                                                name="vendor" placeholder="Enter Vendor Name" autoComplete="email" />
+                                            {/* <CFormText className="help-block">Please enter vendor name</CFormText> */}
                                         </CCol>
                                     </CFormGroup>
 
@@ -401,8 +430,8 @@ class Material extends Component {
                                                     <CInput
                                                         type="text"
                                                         id="name"
-                                                       
-                                                      //  invalid={this.state.validationCreateForm?.name =="" ? true:false}
+
+                                                        //  invalid={this.state.validationCreateForm?.name =="" ? true:false}
                                                         name="name"
                                                         placeholder="Enter Name Material"
                                                         // autoComplete="on"
@@ -413,9 +442,9 @@ class Material extends Component {
                                                         }
                                                         }
                                                     />
-                                                     {/* <CInvalidFeedback>Houston, we have a problem...</CInvalidFeedback>
-                                                  */}
-                                                    <CFormText className="help-block">{this.state.validationCreateForm?.name}</CFormText>
+
+                                                    <span style={{ color: "red" }}>{this.state.validationCreateForm?.name} </span>
+
                                                 </CCol>
                                             </CFormGroup>
                                             <CFormGroup row>
@@ -435,7 +464,8 @@ class Material extends Component {
                                                         }
                                                         }
                                                     />
-                                                    <CFormText className="help-block">*Required</CFormText>
+                                                    <span style={{ color: "red" }}>{this.state.validationCreateForm?.color} </span>
+
                                                 </CCol>
                                             </CFormGroup>
                                             <CFormGroup row>
@@ -455,7 +485,8 @@ class Material extends Component {
                                                         }
                                                         }
                                                     />
-                                                    <CFormText className="help-block">*Required</CFormText>
+                                                    <span style={{ color: "red" }}>{this.state.validationCreateForm?.size} </span>
+
                                                 </CCol>
                                             </CFormGroup>
 
@@ -476,7 +507,8 @@ class Material extends Component {
                                                         }
                                                         }
                                                     />
-                                                    <CFormText className="help-block">{this.state.validationCreateForm?.vendor}</CFormText>
+                                                    <span style={{ color: "red" }}>{this.state.validationCreateForm?.vendor} </span>
+
                                                 </CCol>
                                             </CFormGroup>
                                             <CFormGroup row>
@@ -496,7 +528,8 @@ class Material extends Component {
                                                         }
                                                         }
                                                     />
-                                                    <CFormText className="help-block">*Required</CFormText>
+                                                    <span style={{ color: "red" }}>{this.state.validationCreateForm?.trademark} </span>
+
                                                 </CCol>
                                             </CFormGroup>
                                             <CFormGroup row>
@@ -547,10 +580,10 @@ class Material extends Component {
                                                         options={this.state.types}
                                                         value={this.state.type}
                                                         onChange={(event) => {
-                                                            this.setState({ type: event.value });
+                                                            this.setState({ type: event });
                                                         }} />
 
-
+                                                    <span style={{ color: "red" }}>{this.state.validationCreateForm?.type} </span>
                                                 </CCol>
                                             </CFormGroup>
 
@@ -606,14 +639,14 @@ class Material extends Component {
                                                         name="name"
                                                         placeholder="Enter Name Material"
                                                         // autoComplete="on"
-                                                        value={this.state.name}
+                                                        value={this.state.nameToEdit}
                                                         onChange={(event) => {
                                                             console.log(event.target.value)
-                                                            this.setState({ name: event.target.value })
+                                                            this.setState({ nameToEdit: event.target.value })
                                                         }
                                                         }
                                                     />
-                                                    <CFormText className="help-block">*Required</CFormText>
+                                                    {/* <CFormText className="help-block">*Required</CFormText> */}
                                                 </CCol>
                                             </CFormGroup>
                                             <CFormGroup row>
@@ -627,13 +660,14 @@ class Material extends Component {
                                                         name="color-input"
                                                         placeholder="Enter color material "
                                                         autoComplete="color-input"
+                                                        value={this.state.colorToEdit}
                                                         onChange={(event) => {
 
-                                                            this.setState({ color: event.target.value })
+                                                            this.setState({ colorToEdit: event.target.value })
                                                         }
                                                         }
                                                     />
-                                                    <CFormText className="help-block">*Required</CFormText>
+                                                    {/* <CFormText className="help-block">*Required</CFormText> */}
                                                 </CCol>
                                             </CFormGroup>
                                             <CFormGroup row>
@@ -647,13 +681,14 @@ class Material extends Component {
                                                         name="size"
                                                         placeholder="Enter size material "
                                                         autoComplete="color-input"
+                                                        value={this.state.sizeToEdit}
                                                         onChange={(event) => {
 
-                                                            this.setState({ size: event.target.value })
+                                                            this.setState({ sizeToEdit: event.target.value })
                                                         }
                                                         }
                                                     />
-                                                    <CFormText className="help-block">*Required</CFormText>
+                                                    {/* <CFormText className="help-block">*Required</CFormText> */}
                                                 </CCol>
                                             </CFormGroup>
 
@@ -668,13 +703,14 @@ class Material extends Component {
                                                         name="vendor"
                                                         placeholder="Enter vendor material "
                                                         autoComplete="vendor"
+                                                        value={this.state.vendorToEdit}
                                                         onChange={(event) => {
 
-                                                            this.setState({ vendor: event.target.value })
+                                                            this.setState({ vendorToEdit: event.target.value })
                                                         }
                                                         }
                                                     />
-                                                    <CFormText className="help-block">*Required</CFormText>
+                                                    {/* <CFormText className="help-block">*Required</CFormText> */}
                                                 </CCol>
                                             </CFormGroup>
                                             <CFormGroup row>
@@ -688,13 +724,14 @@ class Material extends Component {
                                                         name="Trademark"
                                                         placeholder="Enter Trademark material "
                                                         autoComplete="Trademark"
+                                                        value={this.state.trademarkToEdit}
                                                         onChange={(event) => {
 
-                                                            this.setState({ trademark: event.target.value })
+                                                            this.setState({ trademarkToEdit: event.target.value })
                                                         }
                                                         }
                                                     />
-                                                    <CFormText className="help-block">*Required</CFormText>
+                                                    {/* <CFormText className="help-block">*Required</CFormText> */}
                                                 </CCol>
                                             </CFormGroup>
                                             <CFormGroup row>
@@ -707,9 +744,9 @@ class Material extends Component {
                                                         id="date-input"
                                                         name="date"
                                                         placeholder="date"
-                                                        value={moment(this.state.date).format("YYYY-MM-DD")}
+                                                        value={moment(this.state.dateToEdit).format("YYYY-MM-DD")}
                                                         onChange={(event) => {
-                                                            this.setState({ date: event.target.value })
+                                                            this.setState({ dateToEdit: event.target.value })
                                                         }}
 
                                                     />
@@ -725,9 +762,10 @@ class Material extends Component {
                                                         name="textarea-input"
                                                         id="textarea-input"
                                                         rows="9"
+                                                        value={this.state.descriptionToEdit}
                                                         placeholder="Content..."
                                                         onChange={(event) => {
-                                                            this.setState({ description: event.target.value })
+                                                            this.setState({ descriptionToEdit: event.target.value })
                                                         }
                                                         }
                                                     />
@@ -767,7 +805,7 @@ class Material extends Component {
 
                     </CModalBody>
                     <CModalFooter>
-                        <CButton color="warning" onClick={() => this.handleEdit(false)}>Submit</CButton>{' '}
+                        <CButton color="warning" onClick={() => this.handleEdit()}>Submit</CButton>{' '}
                         <CButton color="secondary" onClick={() => this.showEditModal(false)}>Cancel</CButton>
                     </CModalFooter>
                 </CModal>
@@ -795,14 +833,14 @@ class Material extends Component {
                     <CCol xs="12" lg="12">
                         <CCard>
                             <CCardHeader>
-                                Striped Table
+                                 Table Material
                             </CCardHeader>
                             <CCardBody>
                                 <CDataTable
                                     items={tableData}
                                     fields={fields}
                                     striped
-                                    itemsPerPage={10}
+                                    itemsPerPage={5}
                                     pagination
                                     // columnFilter
                                     hover
